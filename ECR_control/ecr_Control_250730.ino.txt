@@ -1,0 +1,116 @@
+#include <WiFi.h>
+#include <WebServer.h>
+#include <Preferences.h>
+#include <WiFiManager.h>  // WiFiManager 라이브러리
+
+const int relayPin = 18;
+WebServer server(80);
+Preferences preferences;
+
+IPAddress static_IP(192, 168, 1, 3);
+IPAddress gateway(192, 168, 1, 1);
+IPAddress subnet(255, 255, 255, 0);
+WiFiManager wm;  
+
+// 릴레이 상태 저장
+void saveRelayState(bool state) {
+  preferences.begin("light", false);
+  preferences.putBool("state", state);
+  preferences.end();
+}
+
+// 릴레이 상태 불러오기
+bool loadRelayState() {
+  preferences.begin("light", false);
+  bool state = preferences.getBool("state", true); // 기본값: on
+  preferences.end();
+  return state;
+}
+
+// 릴레이 OFF / Light ON 핸들러
+void handleRelayOn() {
+  digitalWrite(relayPin, HIGH);
+  saveRelayState(true);
+  server.send(200, "application/json", "{\"status\":\"success\",\"message\":\"Relay ON\"}");
+}
+
+// 릴레이 ON / Light OFF 핸들러
+void handleRelayOff() {
+  digitalWrite(relayPin, LOW);
+  saveRelayState(false);
+  server.send(200, "application/json", "{\"status\":\"success\",\"message\":\"Relay OFF\"}");
+}
+
+// 릴레이 상태 확인 핸들러
+void handleStatus() {
+  bool state = digitalRead(relayPin);
+  String status = (state == LOW) ? "OFF" : "ON";
+  server.send(200, "application/json", "{\"status\":\"success\",\"Relay_State\":\"" + status + "\"}");
+}
+
+volatile bool shouldStartPortal = false;
+
+//— 콜백에서는 플래그만 세우기
+void onWiFiDisconnect(WiFiEvent_t, WiFiEventInfo_t) {
+  Serial.println("Wi‑Fi 끊김 감지 → 포털 준비 플래그 설정");
+  shouldStartPortal = true;
+}
+
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(relayPin, OUTPUT);
+
+
+  // 저장된 상태로 릴레이 설정
+  // bool LightState = loadRelayState();
+  // digitalWrite(relayPin, LightState ? HIGH : LOW);
+
+  // (1) 초기 릴레이 상태 세팅
+  digitalWrite(relayPin, HIGH);
+  saveRelayState(true);
+
+  // (2) 고정 IP 설정
+  wm.setSTAStaticIPConfig(static_IP, gateway, subnet);
+  wm.setConfigPortalTimeout(180);       // 3분만 포털 유지
+
+  // (3) autoConnect 호출 — 내부적으로 SSID/비밀번호가 없으면 AP 모드 진입
+  if (!wm.autoConnect("ECR조명제어_10")) {
+    Serial.println("Failed to connect and timed out");
+    ESP.restart();
+  }
+  Serial.println("Wi-Fi connected: " + WiFi.SSID());
+
+  // (4) 이제 연결이 된 뒤에만 끊김 이벤트 등록
+  WiFi.onEvent(onWiFiDisconnect, ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
+
+  // (5) HTTP 서버 라우팅
+  server.on("/commissioning_relay/on",  handleRelayOn);
+  server.on("/commissioning_relay/off", handleRelayOff);
+  server.on("/commissioning_relay/status", handleStatus);
+  server.begin();
+  Serial.println("HTTP server started");
+}
+
+
+void loop() {
+  //— 이벤트 콜백이 세운 플래그가 있으면 포털 진입
+  if (shouldStartPortal) {
+    shouldStartPortal = false;
+    Serial.println(">> 설정 포털 모드로 진입합니다");
+    server.stop();  // 포트 80 해제
+
+    // 블록 호출: AP 모드 + DNS + HTTP 포털 기동
+    if (wm.startConfigPortal("ECR조명제어_10")) {
+      Serial.println("포털에서 새 설정 저장됨, Wi‑Fi 연결 시도 중...");
+    } else {
+      Serial.println("포털 타임아웃 또는 취소됨");
+    }
+
+    // 포털 모드 종료 후, 다시 메인 서버 기동
+    server.begin();
+    Serial.println("HTTP 서버 재시작");
+  }
+
+  server.handleClient();
+}
