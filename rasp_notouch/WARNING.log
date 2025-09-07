@@ -1,0 +1,143 @@
+WARNING 2024-10-25 04:50:28,225 log Not Found: /favicon.ico
+ERROR 2024-10-25 07:18:45,664 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/rasp/rfid/views.py", line 36, in index
+    gpiozero.Device.pin_factory.reset()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'reset'
+ERROR 2024-10-25 07:18:45,667 basehttp "GET / HTTP/1.1" 500 145
+ERROR 2024-10-25 07:18:47,132 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/rasp/rfid/views.py", line 36, in index
+    gpiozero.Device.pin_factory.reset()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'reset'
+ERROR 2024-10-25 07:18:47,133 basehttp "GET / HTTP/1.1" 500 145
+ERROR 2024-10-25 07:19:55,291 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/rasp/rfid/views.py", line 36, in index
+    gpiozero.Device.pin_factory.reset()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'reset'
+ERROR 2024-10-25 07:19:55,295 basehttp "GET / HTTP/1.1" 500 145
+ERROR 2024-10-25 07:19:59,318 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/rasp/rfid/views.py", line 36, in index
+    gpiozero.Device.pin_factory.reset()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'reset'
+ERROR 2024-10-25 07:19:59,318 basehttp "GET / HTTP/1.1" 500 145
+ERROR 2024-10-25 07:20:02,145 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/rasp/rfid/views.py", line 36, in index
+    gpiozero.Device.pin_factory.reset()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'reset'
+ERROR 2024-10-25 07:20:02,147 basehttp "GET / HTTP/1.1" 500 145
+WARNING 2024-10-25 07:22:05,937 log Not Found: /favicon.ico
+WARNING 2024-10-25 07:22:46,404 log Not Found: /favicon.ico
+WARNING 2024-10-25 07:23:40,732 log Not Found: /favicon.ico
+WARNING 2024-10-25 07:28:03,962 log Not Found: /favicon.ico
+WARNING 2024-10-25 07:29:37,978 log Not Found: /favicon.ico
+WARNING 2024-10-25 07:30:46,563 log Not Found: /favicon.ico
+WARNING 2024-10-25 07:45:15,768 log Not Found: /favicon.ico
+WARNING 2024-10-25 07:45:16,660 log Not Found: /favicon.ico
+WARNING 2024-10-25 07:49:40,317 log Not Found: /favicon.ico
+ERROR 2024-10-25 07:52:12,051 log Internal Server Error: /disposal/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/rasp/rfid/views.py", line 68, in read_tag
+    reader.close()
+    ^^^^^^
+UnboundLocalError: cannot access local variable 'reader' where it is not associated with a value
+ERROR 2024-10-25 07:52:12,059 basehttp "POST /disposal/ HTTP/1.1" 500 145
+ERROR 2024-10-25 07:53:49,433 log Internal Server Error: /disposal/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/rasp/rfid/views.py", line 68, in read_tag
+    reader.close()
+    ^^^^^^
+UnboundLocalError: cannot access local variable 'reader' where it is not associated with a value
+ERROR 2024-10-25 07:53:49,434 basehttp "POST /disposal/ HTTP/1.1" 500 145
+WARNING 2024-10-27 22:22:38,351 log Not Found: /favicon.ico
+ERROR 2024-10-28 04:34:23,493 log Internal Server Error: /disposal/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/rasp/rfid/views.py", line 68, in read_tag
+    reader.close()
+    ^^^^^^
+UnboundLocalError: cannot access local variable 'reader' where it is not associated with a value
+ERROR 2024-10-28 04:34:23,500 basehttp "POST /disposal/ HTTP/1.1" 500 145
+ERROR 2024-10-28 05:06:37,509 log Internal Server Error: /disposal/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/rasp/rfid/views.py", line 67, in read_tag
+    reader.close()
+    ^^^^^^
+UnboundLocalError: cannot access local variable 'reader' where it is not associated with a value
+ERROR 2024-10-28 05:06:37,510 basehttp "POST /disposal/ HTTP/1.1" 500 145
+WARNING 2024-10-28 05:06:37,645 log Not Found: /favicon.ico
+WARNING 2024-10-28 05:09:36,869 log Not Found: /favicon.ico
+WARNING 2024-10-28 05:10:06,813 log Not Found: /favicon.ico
+WARNING 2024-10-28 05:10:11,082 log Not Found: /favicon.ico
+WARNING 2024-10-28 05:11:17,104 log Not Found: /favicon.ico
+WARNING 2024-10-28 05:13:31,098 log Not Found: /favicon.ico
+WARNING 2024-10-28 05:15:11,107 log Not Found: /favicon.ico
+WARNING 2024-10-28 05:15:12,546 log Not Found: /favicon.ico
+WARNING 2024-10-28 05:16:00,581 log Not Found: /favicon.ico
+WARNING 2024-10-28 05:16:16,771 log Not Found: /favicon.ico
+WARNING 2024-10-28 05:16:32,056 log Not Found: /favicon.ico
+WARNING 2024-10-28 05:16:32,057 basehttp "GET /favicon.ico HTTP/1.1" 404 179
+WARNING 2024-10-28 05:16:33,645 log Not Found: /favicon.ico
+WARNING 2024-10-28 05:20:15,771 log Not Found: /favicon.ico
+WARNING 2024-10-28 05:20:38,655 log Not Found: /favicon.ico

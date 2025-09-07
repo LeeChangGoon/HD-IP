@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>사용자 추가</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border: 2px solid #006f3c;
+        }
+
+        h1 {
+            color: #006f3c;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-top: 15px;
+        }
+
+        select, input[type="text"], input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #006f3c;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #004f2d;
+        }
+
+        #confirmationMessage {
+            display: none;
+            color: #006f3c;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>사용자 추가</h1>
+        <form action="/user_add/" method="POST" onsubmit="handleButtonClick(event)">
+            <input type="text" name="name" placeholder="이름 입력" required><br>
+
+            <!-- 부서 선택 -->
+            <select id="department" name="department" required onchange="updateCompanies()">
+                <option value="">부서를 선택하세요</option>
+                <option value="환경보건부">환경보건부</option>
+                <option value="선행도장부">선행도장부</option>
+                <option value="도장부">도장부</option>
+                <option value="기장부">기장부</option>
+            </select>
+
+            <!-- 회사 선택 -->
+            <select id="company" name="company" required>
+                <option value="">회사를 선택하세요</option>
+            </select><br>
+
+            <input type="text" name="uid" placeholder="카드ID" required><br>
+            <input type="password" name="admin_pw" placeholder="관리자 비밀번호" required><br>
+            <button type="submit" id="addButton">사용자 추가</button>
+        </form>
+
+        <script>
+            // 부서별 회사 데이터
+            const companiesByDepartment = {
+                "환경보건부"    : ["환경보건부"],
+                "선행도장부"    : ["금양기업", "은성기업", "태양인더스트리", "한솔선박"],
+                "도장부"        : ["미주이엔지", "부림기업", "세왕기업", "안진테크", "찬승", "일영기업", "해강이엔지"],
+                "기장부"        : ["번영이엔지", "석영"]
+            };
+
+            // 부서 변경 시 회사 목록 업데이트
+            function updateCompanies() {
+                const department = document.getElementById("department").value;
+                const companySelect = document.getElementById("company");
+
+                // 기존 옵션 초기화
+                companySelect.innerHTML = '<option value="">회사를 선택하세요</option>';
+
+                if (department && companiesByDepartment[department]) {
+                    // 선택한 부서에 해당하는 회사 추가
+                    companiesByDepartment[department].forEach(company => {
+                        const option = document.createElement("option");
+                        option.value = company;
+                        option.textContent = company;
+                        companySelect.appendChild(option);
+                    });
+                }
+            }
+        </script>
+    </div>
+</body>
+</html>

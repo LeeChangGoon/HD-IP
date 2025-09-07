@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>처리 결과</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- JS가 꺼져 있어도 5초 후 이동 -->
+  <noscript><meta http-equiv="refresh" content="5;url=/home" /></noscript>
+
+  <style>
+    :root{
+      --brand:#006633;
+      --brand-dark:#004d26;
+      --fg:#333;
+      --bg:#fff;
+      --overlay:rgba(0,0,0,.5);
+      --radius:12px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; padding:0;
+      font-family: Arial, sans-serif;
+      background:var(--bg); color:var(--fg);
+      text-align:center;
+    }
+    header{padding:28px 16px}
+    h1{margin:0; font-size:28px; color:var(--brand)}
+    p{font-size:18px; margin:6px 0}
+
+    .btn {
+      background:var(--brand); color:#fff;
+      text-decoration:none; display:inline-block;
+      padding:12px 22px; font-size:18px;
+      border-radius:10px; margin-top:20px;
+      border:0; cursor:pointer;
+      touch-action: manipulation;
+    }
+    .btn:hover{background:var(--brand-dark)}
+    .btn:focus{outline:3px solid #9bd3b3; outline-offset:2px}
+
+    /* 모달 */
+    .modal{
+      position:fixed; inset:0;
+      display:none; /* JS에서 .is-open 추가로 표시 */
+      align-items:center; justify-content:center;
+      background:var(--overlay);
+      z-index:1000;
+      padding:20px;
+    }
+    .modal.is-open{display:flex}
+    .modal-content{
+      background:#fff; width:92%; max-width:360px;
+      border-radius:var(--radius); padding:22px 18px;
+      text-align:center;
+      box-shadow:0 12px 32px rgba(0,0,0,.25);
+      animation:fadeUp .18s ease-out both;
+    }
+    .modal-content h2{margin:0 0 10px; color:#006f3c}
+    .meta{font-size:16px; color:var(--brand); margin-top:6px}
+
+    /* 진행바 */
+    .bar-wrap{
+      margin:16px 0 6px; height:8px;
+      background:#e9f3ed; border-radius:999px; overflow:hidden;
+    }
+    .bar{height:100%; width:0%}
+    .bar::before{
+      content:""; display:block; height:100%; width:100%;
+      background:var(--brand);
+      transition:width .35s linear; /* JS에서 width 변경 */
+    }
+    .bar[data-w]::before{ width: attr(data-w percentage); } /* 일부 브라우저 무시 가능 */
+
+    .count{
+      font-size:14px; color:#4d875f; margin-bottom:4px;
+    }
+
+    @keyframes fadeUp{
+      from{opacity:0; transform:translateY(6px)}
+      to{opacity:1; transform:translateY(0)}
+    }
+
+    /* 모션 최소화 환경 배려 */
+    @media (prefers-reduced-motion:reduce){
+      .modal-content{animation:none}
+      .bar::before{transition:none}
+    }
+        /* === 크기 확대 오버라이드 (스타일 맨 아래에 추가) === */
+    :root { --scale: 1.25; } /* 7인치면 1.25~1.4 추천 */
+
+    body{ font-size: calc(16px * var(--scale)); }
+    h1{ font-size: calc(28px * var(--scale)); }
+
+    /* 본문 글자 */
+    p{ font-size: calc(18px * var(--scale)); }
+
+    /* 버튼 */
+    .btn{
+        font-size: calc(18px * var(--scale));
+        padding: calc(12px * var(--scale)) calc(22px * var(--scale));
+        border-radius: calc(10px * var(--scale));
+    }
+
+    /* 모달 박스 */
+    .modal-content{
+        max-width: calc(360px * var(--scale));  /* 모달 자체 더 큼 */
+        padding: calc(22px * var(--scale)) calc(18px * var(--scale));
+        border-radius: calc(12px * var(--scale));
+    }
+    .modal-content h2{ font-size: calc(24px * var(--scale)); }
+
+    /* 진행바/카운트다운 */
+    .bar-wrap{ height: calc(8px * var(--scale)); }
+    .count{ font-size: calc(14px * var(--scale)); }
+
+        /* === 크기 확대 오버라이드 (스타일 맨 아래에 추가) === */
+        :root { --scale: 1.25; } /* 7인치면 1.25~1.4 추천 */
+
+    body{ font-size: calc(16px * var(--scale)); }
+    h1{ font-size: calc(28px * var(--scale)); }
+
+    /* 본문 글자 */
+    p{ font-size: calc(18px * var(--scale)); }
+
+    /* 버튼 */
+    .btn{
+    font-size: calc(18px * var(--scale));
+    padding: calc(12px * var(--scale)) calc(22px * var(--scale));
+    border-radius: calc(10px * var(--scale));
+    }
+
+    /* 모달 박스 */
+    .modal-content{
+    max-width: calc(360px * var(--scale));  /* 모달 자체 더 큼 */
+    padding: calc(22px * var(--scale)) calc(18px * var(--scale));
+    border-radius: calc(12px * var(--scale));
+    }
+    .modal-content h2{ font-size: calc(24px * var(--scale)); }
+
+    /* 진행바/카운트다운 */
+    .bar-wrap{ height: calc(8px * var(--scale)); }
+    .count{ font-size: calc(14px * var(--scale)); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>처리 결과</h1>
+    <!-- 본문 영역(기본 정보는 간단히만 노출) -->
+    <p>사용자 이름: {{ name }}</p>
+    <p>소속 회사: {{ company }}</p>
+    <a class="btn" href="/home" aria-label="지금 홈으로 이동">지금 돌아가기</a>
+  </header>
+
+  <!-- 접근성 속성 추가된 모달 -->
+  <div
+    id="modal"
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle"
+    data-redirect-seconds="5"
+    data-redirect-url="/home"
+  >
+    <div class="modal-content">
+      <h2 id="modalTitle">처리 완료</h2>
+      <p>사용자 이름: {{ name }}</p>
+      <p>소속 회사: {{ company }}</p>
+      <p>폐기량: {{ Weight|floatformat:"-1" }}kg</p>
+      <p>소속사 폐기량: {{ Company_Weight|floatformat:"-1" }}kg</p>
+
+      <div class="bar-wrap" aria-hidden="true">
+        <div id="progressBar" class="bar"></div>
+      </div>
+      <div class="count" aria-live="polite">
+        <span id="countdown">5</span>초 후 홈으로 이동합니다.
+      </div>
+
+      <a id="gotoHome" class="btn" href="/home">지금 돌아가기</a>
+    </div>
+  </div>
+
+  <script>
+    // 안전 실행: DOM 준비 후 시작
+    document.addEventListener('DOMContentLoaded', function () {
+      const modal = document.getElementById('modal');
+      const gotoBtn = document.getElementById('gotoHome');
+      const countdownEl = document.getElementById('countdown');
+      const bar = document.getElementById('progressBar');
+
+      const SEC = Math.max(1, parseInt(modal.dataset.redirectSeconds || '5', 10));
+      const URL = modal.dataset.redirectUrl || '/home';
+
+      // 모달 표시 & 포커스 이동
+      modal.classList.add('is-open');
+      gotoBtn.focus();
+
+      // 카운트다운 + 진행바
+      let left = SEC;
+      countdownEl.textContent = left;
+
+      const tick = setInterval(() => {
+        left -= 1;
+        if (left < 0) return;
+        countdownEl.textContent = left;
+
+        const ratio = Math.min(1, (SEC - left) / SEC);
+        bar.style.width = (ratio * 100) + '%';
+
+        if (left <= 0) {
+          clearInterval(tick);
+        }
+      }, 1000);
+
+      // 지정 초 뒤 이동 (replace로 히스토리 정리)
+      const timer = setTimeout(() => {
+        window.location.replace(URL);
+      }, SEC * 1000);
+
+      // 사용자가 직접 눌렀을 때 타이머 정리
+      gotoBtn.addEventListener('click', () => {
+        clearTimeout(timer);
+      });
+
+      // 오버레이 클릭 시에도 바로 이동하고 싶다면 아래 주석 해제
+      // modal.addEventListener('click', (e) => {
+      //   if (e.target === modal) window.location.replace(URL);
+      // });
+    });
+  </script>
+</body>
+</html>

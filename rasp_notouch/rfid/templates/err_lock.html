@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>오류 발생</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            color: #cc0000; /* 빨간색으로 오류 표시 */
+            font-size: 36px;
+            margin-top: 50px;
+        }
+        p {
+            font-size: 18px;
+            color: #333333;
+            margin: 20px 0;
+        }
+        button {
+            background-color: #006633; /* 초록색 */
+            color: #ffffff; /* 흰색 글씨 */
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #004d26; /* 진한 초록색 */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>오류가 발생했습니다</h1>
+        <p>{{ message }}</p>
+        <form id="errorForm" action="/disposal_err/" method="GET">
+            <input type="hidden" name="uid" value="{{ uid }}">
+            <input type="hidden" name="name" value="{{ name }}">
+            <input type="hidden" name="company" value="{{ company }}">
+            <button type="submit" id="cancelAutoSubmit">이전 화면으로</button>
+        </form>
+        <p id="countdownMessage"></p>
+    </div>
+
+    <script>
+        // 자동 제출 타이머 설정 (3초)
+        let countdown = 3;
+        const countdownMessage = document.getElementById("countdownMessage");
+        const form = document.getElementById("errorForm");
+        const cancelButton = document.getElementById("cancelAutoSubmit");
+
+        // 타이머 업데이트 및 자동 제출
+        const timer = setInterval(() => {
+            countdown--;
+            countdownMessage.textContent = countdown + "초 뒤에 자동으로 이전 화면으로 이동합니다.";
+
+            if (countdown === 0) {
+                clearInterval(timer); // 타이머 중지
+                form.submit(); // 폼 자동 제출
+            }
+        }, 1000);
+
+        // 버튼 클릭 시 타이머 취소
+        cancelButton.addEventListener("click", () => {
+            clearInterval(timer); // 타이머 중지
+        });
+
+        // 초기 메시지 설정
+        countdownMessage.textContent = countdown + "초 뒤에 자동으로 이전 화면으로 이동합니다.";
+    </script>
+</body>
+</html>

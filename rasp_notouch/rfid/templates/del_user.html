@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>사용자 추가</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border: 2px solid #006f3c;
+        }
+
+        h1 {
+            color: #006f3c;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-top: 15px;
+        }
+
+        select, input[type="text"], input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #006f3c;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #004f2d;
+        }
+
+        #confirmationMessage {
+            display: none;
+            color: #006f3c;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>카드 삭제</h1>
+        <form action="/del_card/" method="POST" onsubmit="handleButtonClick(event)">
+            <input type="text" name="name" placeholder="이름 입력" required><br>
+
+            <input type="password" name="admin_pw" placeholder="관리자 비밀번호" required><br>
+            <button type="submit" id="addButton">사용자 추가</button>
+        </form>
+    </div>
+
+</body>
+</html>
+

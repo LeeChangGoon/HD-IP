@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>폐기 처리</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+  <style>
+    :root{
+      --brand:#006633;
+      --brand-dark:#004d26;
+      --fg:#222;
+      --bg:#f6f8f7;
+      --card:#fff;
+      --radius:16px;
+      --shadow:0 14px 36px rgba(0,0,0,.08);
+      --ring:#8fd0a8;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:
+        radial-gradient(1200px 800px at 10% -10%, #eaf3ed 0%, transparent 60%),
+        radial-gradient(900px 700px at 110% 10%, #eef7f1 0%, transparent 55%),
+        var(--bg);
+      color:var(--fg);
+      font-family: Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-align:center;
+    }
+
+    .wrap{
+      min-height:100dvh;
+      display:flex; align-items:center; justify-content:center;
+      padding: 32px 16px;
+    }
+    .card{
+      width:min(92vw, 760px);
+      background:var(--card);
+      border:2px solid var(--brand);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding: clamp(22px, 4.2vw, 44px);
+      text-align:center;
+    }
+
+    /* 글자 크기 살짝 업 */
+    h1{
+      color:var(--brand);
+      font-weight:800;
+      font-size: clamp(40px, 7.4vw, 66px); /* 기존보다 조금 키움 */
+      line-height:1.12;
+      margin: 0 0 clamp(12px, 2.7vw, 18px);
+      letter-spacing:-0.02em;
+    }
+    p{
+      font-size: clamp(20px, 3.4vw, 42px); /* 기존보다 조금 키움 */
+      font-weight:400;
+      margin: 6px 0;
+    }
+
+    /* 사용자/소속 각각 한 줄 */
+    .info{
+      display:flex;
+      flex-direction: column;      /* 한 줄씩 */
+      align-items:center;
+      gap:12px;
+      margin-top: clamp(8px, 2.2vw, 14px);
+    }
+    .chip{
+      display:block;
+      background:#f0f6f2;
+      border:1px solid #cfe6d8;
+      color:#1d6b44;
+      padding:.55em 1em;
+      border-radius:999px;
+      font-size: clamp(15px, 2.8vw, 19px); /* 살짝 키움 */
+      white-space:nowrap;
+      width: fit-content;
+    }
+
+    button{
+      background:var(--brand); color:#fff; border:0; cursor:pointer;
+      font-size: clamp(16px, 3vw, 18px);
+      padding: .9em 1.2em; border-radius:12px;
+      margin-top: clamp(12px, 2.5vw, 18px);
+      box-shadow: 0 6px 16px rgba(0,0,0,.12);
+      touch-action: manipulation;
+    }
+    button:hover{ background:var(--brand-dark) }
+    button:focus{ outline:3px solid var(--ring); outline-offset:2px }
+
+    #confirmationMessage{
+      display:none;
+      font-size: clamp(15px, 2.9vw, 19px);
+      color:#0b6b3c;
+      background:#eef7f1;
+      border:1px solid #cfe6d8;
+      padding:.8em 1em;
+      border-radius:12px;
+      width: fit-content;
+      margin: 12px auto 0;
+    }
+
+    form{ margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <main class="card" role="main">
+      <h1>사용자 확인</h1>
+
+      {% if user %}
+        <div class="info">
+          <span class="chip">사용자: {{ user.name }}</span>
+          <span class="chip">소속: {{ user.company }}</span>
+        </div>
+      {% endif %}
+
+      <form action="/result/" method="GET" onsubmit="handleButtonClick(event)">
+        <input type="hidden" name="uid" value="{{ uid }}">
+        <input type="hidden" name="name" value="{{ user.name }}">
+        <input type="hidden" name="company" value="{{ user.company }}">
+        <!-- <button type="submit" id="readTagButton">폐기 완료</button> -->
+      </form>
+    </main>
+  </div>
+
+<script defer>
+(function(){
+  const currentUid = "{{ uid|escapejs }}";
+  // 뷰에서 내려주면 그 값을, 아니면 기본 30분(1800000ms)
+  const delay = Number("{{ auto_result_after_ms|default:'1800000' }}"); // 30분
+  let inFlight = false;
+  let pollIv = null;
+  let timeoutId = null;
+
+  function goResult(uid) {
+    // 중복 실행 방지
+    if (pollIv) clearInterval(pollIv);
+    if (timeoutId) clearTimeout(timeoutId);
+    const url = new URL("/result/", window.location.origin);
+    url.searchParams.set("uid", uid);
+    // 히스토리 남기지 않고 이동
+    location.replace(url.toString());
+  }
+
+  function checkRFID(){
+    if(inFlight) return;
+    inFlight = true;
+
+    fetch("{% url 'check_rfid_disposal' %}?current_uid="+encodeURIComponent(currentUid), {
+      cache: 'no-store'
+    })
+    .then(r => {
+      // 204는 바디가 없으므로 그대로 통과
+      if (r.status === 204) return null;
+      if (!r.ok) throw new Error(r.status);
+      return r.json();
+    })
+    .then(data => {
+      if (data && data.tagged) {
+        goResult(data.uid);
+      }
+    })
+    .catch(err => console.warn("RFID 상태 확인 경고:", err))
+    .finally(() => { inFlight = false; });
+  }
+
+  // 카운트다운 UI (선택)
+  const box = document.getElementById('auto-countdown');
+  const end = Date.now() + delay;
+  const tick = () => {
+    const ms = end - Date.now();
+    if (ms <= 0) return;
+    const mm = Math.floor(ms / 60000);
+    const ss = Math.floor((ms % 60000) / 1000);
+    if (box) box.textContent = `자동 완료까지 ${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    tick();
+    setInterval(tick, 1000);                 // 1초마다 남은 시간 갱신
+    pollIv = setInterval(checkRFID, 2000);   // 2초마다 RFID 폴링
+    timeoutId = setTimeout(() => {           // 30분 뒤 자동 이동
+      goResult(currentUid);
+    }, delay);
+  });
+})();
+</script>
+
+</body>
+</html>

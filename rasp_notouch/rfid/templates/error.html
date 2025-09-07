@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>오류 발생</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --error:#cc0000;
+      --error-ink:#9b1c1c;
+      --error-bg:#ffe8e8;
+      --brand:#006633;
+      --brand-dark:#004d26;
+      --fg:#222;
+      --bg:#f6f8f7;
+      --card:#fff;
+      --radius:16px;
+      --shadow:0 14px 36px rgba(0,0,0,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      color:var(--fg);
+      background:
+        radial-gradient(1200px 800px at 10% -10%, #fbeeee 0%, transparent 60%),
+        radial-gradient(900px 700px at 110% 10%, #f4faf5 0%, transparent 55%),
+        var(--bg);
+      text-align:center;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    .wrap{
+      min-height:100dvh;
+      display:flex; align-items:center; justify-content:center;
+      padding:32px 16px;
+    }
+    .container{
+      width:min(92vw, 760px);
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding: clamp(22px, 4.2vw, 44px);
+      border:2px solid var(--brand);
+    }
+
+    /* 에러 아이콘 */
+    .icon{
+      width: clamp(72px, 9vw, 96px);
+      height: clamp(72px, 9vw, 96px);
+      margin: 0 auto clamp(14px, 2.6vw, 18px);
+      border-radius:50%;
+      background: var(--error-bg);
+      border: 2px solid var(--error);
+      display:grid; place-items:center;
+    }
+    .icon::before{
+      content:"!";
+      font-weight:900;
+      color:var(--error);
+      font-size: clamp(38px, 5.2vw, 48px);
+      line-height:1;
+    }
+
+    h1{
+      color:var(--error);
+      font-weight:800;
+      font-size: clamp(36px, 7vw, 64px);
+      line-height:1.12;
+      margin: 0 0 clamp(10px, 2.5vw, 14px);
+      letter-spacing:-0.02em;
+    }
+    .lead{
+      font-size: clamp(18px, 3.2vw, 28px);
+      margin: 6px 0 2px;
+      color: var(--error-ink);
+    }
+    .msg{
+      font-size: clamp(18px, 3.2vw, 24px);
+      margin: 6px 0;
+      color:#333;
+      word-break: keep-all;
+    }
+    .chip{
+      display:inline-block;
+      background:#fff4f4;
+      border:1px solid #ffd0d0;
+      color:#8a1111;
+      padding:.45em .85em;
+      border-radius:999px;
+      font-size: clamp(14px, 2.6vw, 18px);
+      margin-top: 6px;
+    }
+
+    .hint{
+      font-size: clamp(16px, 2.9vw, 20px);
+      color:#1e6a44;
+      margin: clamp(10px, 2.5vw, 14px) 0;
+    }
+
+    a.button{
+      display:inline-block;
+      text-decoration:none;
+      color:#fff;
+      background:var(--brand);
+      padding:.9em 1.2em;
+      border-radius:12px;
+      font-size: clamp(16px, 3vw, 18px);
+      margin-top: clamp(12px, 2.5vw, 18px);
+      box-shadow: 0 6px 16px rgba(0,0,0,.12);
+    }
+    a.button:hover{ background:var(--brand-dark) }
+
+    @media (prefers-reduced-motion:reduce){
+      .container{ scroll-behavior: auto }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="container" role="main">
+      <div class="icon" aria-hidden="true"></div>
+      <h1>오류가 발생했습니다</h1>
+
+      <p class="lead">처리 중 문제가 발생했어요.</p>
+      <p class="msg">{{ message }}</p>
+      <div class="chip">상태 코드: {{ status_code }}</div>
+
+      <p class="hint">3초 뒤 초기 화면으로 자동 이동합니다.</p>
+      <a class="button" href="/home">홈으로 돌아가기</a>
+    </div>
+  </div>
+
+  <script>
+    // 3초 후 초기 화면으로 이동 (기능 변경 없음)
+    setTimeout(function() {
+      window.location.href = "/home";
+    }, 3000);
+  </script>
+</body>
+</html>
